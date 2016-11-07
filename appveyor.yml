@@ -1,6 +1,7 @@
 version: 1.0.{build}
 configuration: Release
 before_build:
+  - cmd: cd src 
   - cmd: nuget restore
 build:
   project: src/SequencedAggregate.sln

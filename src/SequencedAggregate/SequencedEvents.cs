@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SequencedAggregate
 {
-    public class SequencedAggreagate
+    public class SequencedEvents
     {
         public IDictionary<long, IEnumerable<IDomainEvent>> UncommittedEvents => _uncommittedEvents.ToDictionary(u => u.Key, u => u.Value.AsEnumerable());
 

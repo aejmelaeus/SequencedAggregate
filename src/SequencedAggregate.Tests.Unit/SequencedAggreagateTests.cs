@@ -13,7 +13,7 @@ namespace SequencedAggregate.Tests.Unit
             const int anchor = 123;
             var testEvent = new TestEvent();
 
-            var sequencedAggregate = new SequencedAggreagate();
+            var sequencedAggregate = new SequencedEvents();
 
             // Act
             sequencedAggregate.AddEvent(testEvent, anchor);
@@ -31,7 +31,7 @@ namespace SequencedAggregate.Tests.Unit
             var firstTestEvent = new TestEvent();
             var lastTestEvent = new TestEvent();
 
-            var sequencedAggregate = new SequencedAggreagate();
+            var sequencedAggregate = new SequencedEvents();
 
             // Act
             sequencedAggregate.AddEvent(firstTestEvent, anchor);

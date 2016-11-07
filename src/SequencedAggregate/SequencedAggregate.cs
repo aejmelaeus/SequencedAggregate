@@ -3,16 +3,15 @@ using System.Collections.Generic;
 
 namespace SequencedAggregate
 {
-    public abstract class SequencedAggregateBase
+    public abstract class SequencedAggregate : SequencedEvents
     {
         public string AggregateId { get; }
 
-        protected SequencedAggregateBase(string aggregateId)
+        protected SequencedAggregate(string aggregateId)
         {
             AggregateId = aggregateId;
         }
 
-        private readonly Dictionary<long, List<IDomainEvent>> _uncommitedEvents = new Dictionary<long, List<IDomainEvent>>();
         private readonly Dictionary<Type, Action<IDomainEvent>> _routes = new Dictionary<Type, Action<IDomainEvent>>();
 
         protected abstract void RegisterTransitions();
@@ -25,18 +24,7 @@ namespace SequencedAggregate
         protected void RaiseEvent(IDomainEvent domainEvent)
         {
             ApplyEvent(domainEvent);
-
-            
-
-            //_uncommitedEvents.Add(domainEvent);
-        }
-
-        protected void RaiseEvent(IDomainEvent domainEvent, long sequenceAnchor)
-        {
-            if (_uncommitedEvents.ContainsKey(sequenceAnchor))
-            {
-                
-            }
+            AddEvent(domainEvent, DateTime.UtcNow.Ticks);
         }
 
         public void ApplyEvent(IDomainEvent domainEvent)

@@ -40,8 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SequencedAggreagate.cs" />
-    <Compile Include="SequencedAggregateBase.cs" />
+    <Compile Include="SequencedEvents.cs" />
+    <Compile Include="SequencedAggregate.cs" />
     <Compile Include="IDomainEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

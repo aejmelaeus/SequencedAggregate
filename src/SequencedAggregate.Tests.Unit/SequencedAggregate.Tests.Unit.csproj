@@ -44,7 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="SequencedAggregateBaseTests.cs" />
+    <Compile Include="TestEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequencedAggreagateTests.cs" />
   </ItemGroup>

@@ -1,6 +1,10 @@
 # SequencedAggregate
 
-A simple Event Store that is using SQL Server as persistence
+Sometimes your Aggregate uses events from other bounded contexts. If messaging is used to listen for those events you have take into account for the inheritent unreliability of messaging. Messages that arrive in wrong order can have severe consequences. Therefore we want to be sure to apply the events in the correct order.
+
+## Event Store
+
+The SequencedAggregate uses NEventStore as persistence and adds the capability to reorder events to the sequence they occured. Events are sorted on sequence.
 
 Using a Event Store means that you don't have the current state of an object stored in a database, but all the event that lead to that state. This is helpful when working with message driven architectures. When a message arrives it is applied to the event stream in it's own sequence, meaning that it does not overwrite the latest state.
 

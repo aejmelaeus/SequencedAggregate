@@ -4,7 +4,7 @@ Sometimes your Aggregate uses events from other bounded contexts. If messaging i
 
 ## Event Store
 
-The SequencedAggregate uses NEventStore as persistence and adds the capability to reorder events to the sequence they occured. Events are sorted on sequence.
+The `SequencedAggregate` uses `NEventStore` as persistence and adds the capability to reorder events to the sequence they occured. Events are sorted on sequence.
 
 Using a Event Store means that you don't have the current state of an object stored in a database, but all the event that lead to that state. This is helpful when working with message driven architectures. When a message arrives it is applied to the event stream in it's own sequence, meaning that it does not overwrite the latest state.
 

@@ -53,13 +53,28 @@ namespace SequencedAggregate.Tests.Unit
         {
             // Arrange
             const string testEventValue = "ItShouldBeAppliedWhenRaised";
-            var someOtherEvent = new TestEvent { Value = testEventValue };
+            var testEvent = new TestEvent { Value = testEventValue };
 
             // Act
-            RaiseEvent(someOtherEvent);
+            RaiseEvent(testEvent);
 
             // Assert
             Assert.That(_testEventValue, Is.EqualTo(testEventValue));
+        }
+
+        [Test]
+        public void ClearUncommittedEvents_WhenInvoked_UncommittedEventsCleared()
+        {
+            // Arrange
+            var testEvent = new TestEvent();
+
+            RaiseEvent(testEvent);
+            
+            // Act
+            ClearUncommittedEvents();
+
+            // Assert
+            Assert.That(UncommittedEvents.Count, Is.EqualTo(0));
         }
     }
 }

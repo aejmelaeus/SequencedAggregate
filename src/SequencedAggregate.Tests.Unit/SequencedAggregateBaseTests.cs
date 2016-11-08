@@ -12,15 +12,16 @@ namespace SequencedAggregate.Tests.Unit
     public class SequencedAggregateBaseTests : SequencedAggregate
     {
         private const string AggregateIdTestValue = "AFancyAggregateId";
+        private string _testEventValue;
 
         public SequencedAggregateBaseTests() : base(AggregateIdTestValue)
         {
-            // Not much here (yet)
+            RegisterTransition<TestEvent>(Apply);
         }
 
-        protected override void RegisterTransitions()
+        public void Apply(TestEvent testEvent)
         {
-            // Nothing here...
+            _testEventValue = testEvent.Value;
         }
 
         [Test]
@@ -44,7 +45,21 @@ namespace SequencedAggregate.Tests.Unit
             var expectedDateTime = new DateTime(expectedAnchor);
             var actualDateTime = new DateTime(actualAanchor);
 
-            Assert.That(expectedDateTime, Is.EqualTo(actualDateTime).Within(TimeSpan.FromMilliseconds(1)));
+            Assert.That(expectedDateTime, Is.EqualTo(actualDateTime).Within(TimeSpan.FromMilliseconds(100)));
+        }
+
+        [Test]
+        public void RaiseEvent_WhenCalled_EventIsApplied()
+        {
+            // Arrange
+            const string testEventValue = "ItShouldBeAppliedWhenRaised";
+            var someOtherEvent = new TestEvent { Value = testEventValue };
+
+            // Act
+            RaiseEvent(someOtherEvent);
+
+            // Assert
+            Assert.That(_testEventValue, Is.EqualTo(testEventValue));
         }
     }
 }

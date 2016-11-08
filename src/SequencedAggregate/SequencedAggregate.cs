@@ -14,8 +14,6 @@ namespace SequencedAggregate
 
         private readonly Dictionary<Type, Action<IDomainEvent>> _routes = new Dictionary<Type, Action<IDomainEvent>>();
 
-        protected abstract void RegisterTransitions();
-
         protected void RegisterTransition<T>(Action<T> transition) where T : class
         {
             _routes.Add(typeof(T), o => transition(o as T));

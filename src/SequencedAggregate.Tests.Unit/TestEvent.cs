@@ -2,6 +2,6 @@
 {
     public class TestEvent : IDomainEvent
     {
-        // Not much here...
+        public string Value { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace SequencedAggregate.Tests.Unit
 {
-    public class TestEvent : IDomainEvent
+    internal class TestEvent
     {
-        public string Value { get; set; }
+        // Nothing here!
     }
 }

@@ -6,8 +6,11 @@ before_build:
 build:
   project: src/SequencedAggregate.sln
   verbosity: minimal
+before_test:
+  - cmd: sqlcmd -S localhost,1433 -U sa -P Password12! -Q "CREATE DATABASE SequencedAggregate.Acceptance" -d "master"
 test:
   assemblies:
   - 'SequencedAggregate.Tests.Unit.dll'
+  - 'SequencedAggregate.Tests.Acceptance.dll'
 services:
   - mssql2014

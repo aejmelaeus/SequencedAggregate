@@ -17,7 +17,7 @@ Traditional repositories that stores the latest snapshot of an object can have a
 You should install SequencedAggregate from NuGet (TODO!):
 
 ```
-    Install-Package SequencedAggregate
+Install-Package SequencedAggregate
 ```
 ## Documentation
 

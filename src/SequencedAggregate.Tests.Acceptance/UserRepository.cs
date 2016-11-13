@@ -30,4 +30,28 @@ namespace SequencedAggregate.Tests.Acceptance
             _sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, Guid.NewGuid(), new []{ @event });
         }
     }
+
+    internal class IncrementRepository
+    {
+        private readonly ISequencedEventStore _sequencedEventStore;
+
+        public IncrementRepository(ISequencedEventStore sequencedEventStore)
+        {
+            _sequencedEventStore = sequencedEventStore;
+        }
+
+        internal Increment GetById(Guid id)
+        {
+            var increment = new Increment(id);
+
+            var events = _sequencedEventStore.GetById(id.ToString());
+
+            foreach (var @event in events)
+            {
+                increment.Apply(@event as Incremented);
+            }
+
+            return increment;
+        }
+    }
 }

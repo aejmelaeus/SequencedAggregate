@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using NEventStore;
-using NEventStore.Persistence.Sql.SqlDialects;
 using NUnit.Framework;
+using NEventStore.Persistence.Sql.SqlDialects;
 
 namespace SequencedAggregate.Tests.Acceptance
 {
@@ -9,7 +10,7 @@ namespace SequencedAggregate.Tests.Acceptance
     public class AcceptanceTests
     {
         [Test]
-        public void CommitEvent_WhenOlderEventIsCommitedAfterNewer_OlderEventAppliedBeforeNewer()
+        public void Sequencing_WhenOlderEventIsCommitedAfterNewer_OlderEventAppliedBeforeNewer()
         {
             // Arrange
             var storeEvents = GetStoreEvents();
@@ -37,6 +38,35 @@ namespace SequencedAggregate.Tests.Acceptance
             // Assert
             var user = userRepository.GetById(userId);
             Assert.That(user.Email, Is.EqualTo(newestEmail));
+        }
+
+        [Test]
+        public void DuplicateCommit_WhenCommittingADuplicateEvent_OtherEventDiscarded()
+        {
+            // Arrange
+            var messageId = Guid.NewGuid();
+            var sequenceAnchor = 123;
+
+            var incremented = new Incremented { MessageId = messageId };
+ 
+            var storeEvents = GetStoreEvents();
+
+            var id = Guid.NewGuid();
+
+            var sequencedEventStore = new SequencedNEventStore(storeEvents);
+            var incrementRepository = new IncrementRepository(sequencedEventStore);
+            
+            // Act
+            // We simulate that we are in NServiceBus Handker that has committed the
+            // event but somehting else failed and the message is retried.
+            // We don't want dublicate commits.
+            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<object> { incremented });
+            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<object> { incremented });
+
+            // Assert
+            var increment = incrementRepository.GetById(id);
+
+            Assert.That(increment.IncrementValue, Is.EqualTo(1));
         }
 
         private static IStoreEvents GetStoreEvents()

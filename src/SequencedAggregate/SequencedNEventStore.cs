@@ -7,7 +7,7 @@ namespace SequencedAggregate
     public class SequencedNEventStore : ISequencedEventStore
     {
         private readonly IStoreEvents _eventStore;
-        
+
         public SequencedNEventStore(IStoreEvents eventStore)
         {
             _eventStore = eventStore;
@@ -15,13 +15,13 @@ namespace SequencedAggregate
 
         public void CommitEvents(string id, IEnumerable<object> events)
         {
-            long sequenceAnchor = DateTime.UtcNow.Ticks;
-            Guid commitId = Guid.NewGuid();
+            var sequenceAnchor = DateTime.UtcNow.Ticks;
+            var commitId = Guid.NewGuid();
 
             CommitEvents(id, sequenceAnchor, commitId, events);
         }
 
-        public void CommitEvents(string id, long sequenceAnchor, Guid commitId , IEnumerable<object> events)
+        public void CommitEvents(string id, long sequenceAnchor, Guid commitId, IEnumerable<object> events)
         {
             using (var stream = _eventStore.OpenStream(id))
             {
@@ -32,7 +32,16 @@ namespace SequencedAggregate
                     stream.Add(eventMessage);
                 }
 
-                stream.CommitChanges(Guid.NewGuid());
+                try
+                {
+                    stream.CommitChanges(commitId);
+                }
+                catch (DuplicateCommitException)
+                {
+                    // Nothing here... 
+                    // We want just to swallow the exception, since we know that the event
+                    // is already committed and every one can live happily ever after.
+                }
             }
         }
 

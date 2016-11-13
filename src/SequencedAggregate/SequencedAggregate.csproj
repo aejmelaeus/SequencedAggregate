@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventMessages.cs" />
-    <Compile Include="IDomainRepository.cs" />
+    <Compile Include="SequencedNEventStore.cs" />
     <Compile Include="ISequencedEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceConstants.cs" />

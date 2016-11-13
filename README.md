@@ -1,27 +1,17 @@
 # SequencedAggregate
 
-Sometimes your Aggregate uses events from other bounded contexts. If messaging is used to listen for those events you have take into account for the inheritent unreliability of messaging. Messages that arrive in wrong order can have severe consequences. Therefore we want to be sure to apply the events in the correct order.
+The SequencedAggregate is a small library that sits on top ov `NEventStore` that handles Sequencing events the order they occured in another Bounded Context, not the time the events are processed.
 
-## Event Store
+[![Build status](https://ci.appveyor.com/api/projects/status/dxx6syjto963xq9c/branch/master?svg=true)](https://ci.appveyor.com/project/aejmelaeus/sequencedaggregate/branch/master)
 
-The `SequencedAggregate` uses `NEventStore` as persistence and adds the capability to reorder events to the sequence they occured. Events are sorted on sequence.
+## Driving forces
 
-Using a Event Store means that you don't have the current state of an object stored in a database, but all the event that lead to that state. This is helpful when working with message driven architectures. When a message arrives it is applied to the event stream in it's own sequence, meaning that it does not overwrite the latest state.
+Aggregates within a Bounded Context can have parts of it's data owned by other Bounded Contexts and get updates to that data via events. A message based system is unreliable by nature and messages can arrive in wrong order.
 
-Using a traditional SQL database can be problematic when using a message based system. Messages can arrive in the wrong order, which is can be fatal in some situations.
+Some events are immutable, then it usually don't matter if events arrive in the wrong order, for example ´OrderCreated´. However when messages mutates a object, messages that arrive in the wrong order can have severe impact on the system. Take for example the message `UserEmailUpdated`. If those get mixed up, the system will start sending notifications to the old email address.
 
-## Aggregate
+Traditional repositories that stores the latest snapshot of an object can have a hard time to deal with events that are delivered in the wrong order. In these cases a Event Stream might be a better case.
 
-The aggregate is "A collection of objects that are bound together by a root entity". Examples of aggregates in a system might be `Client`, `Order` or `User`. When you modify something within the aggregate, you persist the root object.
+## Documentation
 
-## Sequence
-
-The sequence of events in a system can be critical, especially in cases where the events change the state of the same object. Take for example the event `UserEmailUpdated`. If such a message is processed in wrong order the system will know the old email address.
-
-## Basic concepts
-
-The state of your object is all events applied to it. When you read a object all events are applied to it. When you modify the object, new events are applyed to your object and stored.
-
-## Usage
-
-To create a aggregate root that is sequenced you derive from the `SequenceAggreagate` base class. This adds a few new functions to your class.
+Read more in the wiki (link).

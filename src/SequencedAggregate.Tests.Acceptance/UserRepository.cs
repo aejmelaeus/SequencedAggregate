@@ -15,11 +15,11 @@ namespace SequencedAggregate.Tests.Acceptance
         {
             var user = new User(id);
 
-            var events = _sequencedEventStore.GetById(id.ToString());
+            var events = _sequencedEventStore.GetById<UserEmailUpdated>(id.ToString());
 
             foreach (var @event in events)
             {
-                user.Apply(@event as UserEmailUpdated);
+                user.Apply(@event);
             }
 
             return user;

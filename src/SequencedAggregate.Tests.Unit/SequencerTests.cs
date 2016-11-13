@@ -60,7 +60,7 @@ namespace SequencedAggregate.Tests.Unit
                 se11
             };
 
-            var result = Sequencer.Sequence(sequencedEvents).ToList();
+            var result = Sequencer.Sequence<TestEvent>(sequencedEvents).ToList();
 
             Assert.That(result[0], Is.EqualTo(firstAnchorFirstIndex));
             Assert.That(result[1], Is.EqualTo(firstAnchorSecondIndex));
@@ -82,7 +82,7 @@ namespace SequencedAggregate.Tests.Unit
 
             var eventMessages = new List<EventMessage> { eventMessage };
 
-            Assert.Throws<SequenceException>(() => { Sequencer.Sequence(eventMessages); });
+            Assert.Throws<SequenceException>(() => { Sequencer.Sequence<EventMessage>(eventMessages); });
         }
     }
 }

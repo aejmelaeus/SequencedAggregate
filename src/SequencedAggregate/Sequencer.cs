@@ -7,9 +7,9 @@ namespace SequencedAggregate
 {
     public static class Sequencer
     {
-        public static IEnumerable<object> Sequence(ICollection<EventMessage> events)
+        public static IEnumerable<TEvent> Sequence<TEvent>(ICollection<EventMessage> events) where TEvent : class
         {
-            var result = new List<SortableEventMessage>();
+            var result = new List<SortableEventMessage<TEvent>>();
 
             try
             {
@@ -18,10 +18,10 @@ namespace SequencedAggregate
                     var anchorIndex = int.Parse(eventMessage.Headers[SequenceConstants.AnchorIndexKey].ToString());
                     var sequenceAnchor = long.Parse(eventMessage.Headers[SequenceConstants.SequenceAnchorKey].ToString());
 
-                    result.Add(new SortableEventMessage
+                    result.Add(new SortableEventMessage<TEvent>
                     {
                         AnchorIndex = anchorIndex,
-                        Event = eventMessage.Body,
+                        Event = eventMessage.Body as TEvent,
                         SequenceAnchor = sequenceAnchor
                     });
                 }
@@ -36,9 +36,9 @@ namespace SequencedAggregate
                          .Select(r => r.Event);
         }
 
-        private class SortableEventMessage
+        private class SortableEventMessage<TEvent>
         {
-            public object Event { get; set; }
+            public TEvent Event { get; set; }
             public long SequenceAnchor { get; set; }
             public int AnchorIndex { get; set; }
         }

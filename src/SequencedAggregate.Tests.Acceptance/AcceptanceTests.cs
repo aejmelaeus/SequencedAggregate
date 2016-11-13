@@ -60,8 +60,8 @@ namespace SequencedAggregate.Tests.Acceptance
             // We simulate that we are in NServiceBus Handker that has committed the
             // event but somehting else failed and the message is retried.
             // We don't want dublicate commits.
-            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<object> { incremented });
-            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<object> { incremented });
+            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<Incremented> { incremented });
+            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<Incremented> { incremented });
 
             // Assert
             var increment = incrementRepository.GetById(id);

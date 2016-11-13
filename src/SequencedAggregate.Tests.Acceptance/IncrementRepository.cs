@@ -15,11 +15,11 @@ namespace SequencedAggregate.Tests.Acceptance
         {
             var increment = new Increment(id);
 
-            var events = _sequencedEventStore.GetById(id.ToString());
+            var events = _sequencedEventStore.GetById<Incremented>(id.ToString());
 
             foreach (var @event in events)
             {
-                increment.Apply(@event as Incremented);
+                increment.Apply(@event);
             }
 
             return increment;

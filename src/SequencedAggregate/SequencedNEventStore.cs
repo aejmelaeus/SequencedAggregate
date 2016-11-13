@@ -13,7 +13,7 @@ namespace SequencedAggregate
             _eventStore = eventStore;
         }
 
-        public void CommitEvents(string id, IEnumerable<object> events)
+        public void CommitEvents<TEvent>(string id, IEnumerable<TEvent> events) where TEvent : class
         {
             var sequenceAnchor = DateTime.UtcNow.Ticks;
             var commitId = Guid.NewGuid();
@@ -21,11 +21,11 @@ namespace SequencedAggregate
             CommitEvents(id, sequenceAnchor, commitId, events);
         }
 
-        public void CommitEvents(string id, long sequenceAnchor, Guid commitId, IEnumerable<object> events)
+        public void CommitEvents<TEvent>(string id, long sequenceAnchor, Guid commitId, IEnumerable<TEvent> events) where TEvent : class
         {
             using (var stream = _eventStore.OpenStream(id))
             {
-                var eventMessags = EventMessages.Parse(sequenceAnchor, events);
+                var eventMessags = EventMessages.Parse(sequenceAnchor, events as IEnumerable<object>);
 
                 foreach (var eventMessage in eventMessags)
                 {
@@ -45,12 +45,12 @@ namespace SequencedAggregate
             }
         }
 
-        public IEnumerable<object> GetById(string id)    
+        public IEnumerable<TEvent> GetById<TEvent>(string id) where TEvent : class
         {
             using (var stream = _eventStore.OpenStream(id))
             {
                 var events = stream.CommittedEvents;
-                var sequencedEvents = Sequencer.Sequence(events);
+                var sequencedEvents = Sequencer.Sequence<TEvent>(events);
                 return sequencedEvents;
             }
         }

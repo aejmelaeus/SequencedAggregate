@@ -12,14 +12,7 @@ namespace SequencedAggregate.Tests.Acceptance
         public void CommitEvent_WhenOlderEventIsCommitedAfterNewer_OlderEventAppliedBeforeNewer()
         {
             // Arrange
-            var storeEvents = Wireup.Init()
-                
-                .UsingSqlPersistence("SequencedAggregate.AcceptanceTests")
-                    .WithDialect(new MsSqlDialect())
-                    .InitializeStorageEngine()
-                .UsingJsonSerialization()
-                    .Compress()
-                .Build();
+            var storeEvents = GetStoreEvents();
 
             var userId = Guid.NewGuid();
 
@@ -46,7 +39,19 @@ namespace SequencedAggregate.Tests.Acceptance
             Assert.That(user.Email, Is.EqualTo(newestEmail));
         }
 
-        //[Test]
-        //public 
+        private static IStoreEvents GetStoreEvents()
+        {
+            string connectionString = Environment.GetEnvironmentVariables().Contains("APPVEYOR")
+                ? @"Server=(local)\SQL2014;Initial Catalog=Acceptance;User ID=sa;Password=Password12!"
+                : @"Server=(local)\SQLEXPRESS; Initial Catalog=SequencedAggregate.Acceptance; Integrated Security=True";
+
+            return Wireup.Init()
+                .UsingSqlPersistence("SequencedAggregate", "System.Data.SqlClient", connectionString)
+                    .WithDialect(new MsSqlDialect())
+                    .InitializeStorageEngine()
+                .UsingJsonSerialization()
+                    .Compress()
+                .Build();
+        }
     }
 }

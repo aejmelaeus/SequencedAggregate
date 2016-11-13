@@ -12,6 +12,12 @@ Some events are immutable, then it usually don't matter if events arrive in the 
 
 Traditional repositories that stores the latest snapshot of an object can have a hard time to deal with events that are delivered in the wrong order. In these cases a Event Stream might be a better case.
 
+## Installing SequencedAggregate
+
+You should install SequencedAggregate from NuGet (TODO!):
+
+`Install-Package SequencedAggregate`
+
 ## Documentation
 
 Read more in the wiki (link).

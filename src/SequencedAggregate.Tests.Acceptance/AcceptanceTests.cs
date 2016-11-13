@@ -45,5 +45,8 @@ namespace SequencedAggregate.Tests.Acceptance
             var user = userRepository.GetById(userId);
             Assert.That(user.Email, Is.EqualTo(newestEmail));
         }
+
+        //[Test]
+        //public 
     }
 }

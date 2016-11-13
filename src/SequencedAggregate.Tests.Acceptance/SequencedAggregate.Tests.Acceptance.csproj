@@ -56,12 +56,14 @@
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    
     <None Include="App.config" />
     <None Include="App.Release.config">
       <DependentUpon>App.config</DependentUpon>
     </None>
     <None Include="App.Debug.config">
+      <DependentUpon>App.Config</DependentUpon>
+    </None>
+    <None Include="App.AppVeyor.config">
       <DependentUpon>App.Config</DependentUpon>
     </None>
     <None Include="packages.config" />

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using NEventStore;
 using NUnit.Framework;
+using System.Collections.Generic;
 using NEventStore.Persistence.Sql.SqlDialects;
 
 namespace SequencedAggregate.Tests.Acceptance

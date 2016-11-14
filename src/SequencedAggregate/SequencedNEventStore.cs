@@ -25,7 +25,7 @@ namespace SequencedAggregate
         {
             using (var stream = _eventStore.OpenStream(id))
             {
-                var eventMessags = EventMessages.Parse(sequenceAnchor, events as IEnumerable<object>);
+                var eventMessags = EventMessages.Parse(sequenceAnchor, events);
 
                 foreach (var eventMessage in eventMessags)
                 {

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SequencedAggregate</id>
+    <version>$version$</version>
+    <description>The SequencedAggregate that works with NEventStore</description>
+    <authors>Weikko Aejmelaeus</authors>
+  </metadata>
+</package>

@@ -12,6 +12,8 @@ before_build:
 build:
   project: src/SequencedAggregate.sln
   verbosity: minimal
+after_build:
+  - nuget pack src/SequencedAggregate/SequencedAggregate.nuspec
 before_test:
   - cmd: sqlcmd -S localhost,1433 -U sa -P Password12! -Q "CREATE DATABASE Acceptance" -d "master"
 test:

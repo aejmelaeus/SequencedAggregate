@@ -18,7 +18,7 @@ test:
   assemblies:
   - 'SequencedAggregate.Tests.Unit.dll'
   - 'SequencedAggregate.Tests.Acceptance.dll'
-after_build: nuget pack SequencedAggregate\SequencedAggregate.csproj -Version '%APPVEYOR_BUILD_VERSION%'
+after_build: nuget pack SequencedAggregate\SequencedAggregate.csproj -Version %APPVEYOR_BUILD_VERSION%
 services:
   - mssql2014
 deploy:

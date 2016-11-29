@@ -28,4 +28,4 @@ deploy:
   api_key:
     secure: Cn+HK5O+bcpCL3ByqeQyfeysjGapaXDtEsbYgWOtR39oCx3TbVFa8eaKY5jyFS1W
   skip_symbols: false
-  artifact: SequencedAggregate*.nupkg
+  artifact: SequencedAggregate.1.0.43.nupkg

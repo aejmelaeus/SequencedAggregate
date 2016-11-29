@@ -20,7 +20,7 @@ test:
   - 'SequencedAggregate.Tests.Acceptance.dll'
 after_build: nuget pack SequencedAggregate\SequencedAggregate.csproj -Version %APPVEYOR_BUILD_VERSION%
 artifacts:
-  - path: '**\*.nupkg'
+  - path: '**\SequencedAggregate*.nupkg'
 services:
   - mssql2014
 deploy:
@@ -28,4 +28,4 @@ deploy:
   api_key:
     secure: Cn+HK5O+bcpCL3ByqeQyfeysjGapaXDtEsbYgWOtR39oCx3TbVFa8eaKY5jyFS1W
   skip_symbols: false
-  artifact: SequencedAggregate.1.0.43.nupkg
+  artifact: /.*\.nupkg/

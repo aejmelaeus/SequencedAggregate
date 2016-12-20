@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SequencedAggregate
 {
-    public class SequencedNEventStore : ISequencedEventStore
+    internal class SequencedNEventStore<TEventBase> : ISequencedEventStore<TEventBase> where TEventBase : class
     {
         private readonly IStoreEvents _eventStore;
 
@@ -13,7 +13,12 @@ namespace SequencedAggregate
             _eventStore = eventStore;
         }
 
-        public void CommitEvents<TEvent>(string id, IEnumerable<TEvent> events) where TEvent : class
+        public void CommitEvent(string id, TEventBase @event)
+        {
+            CommitEvents(id, new[] { @event });
+        }
+
+        public void CommitEvents(string id, IEnumerable<TEventBase> events)
         {
             var sequenceAnchor = DateTime.UtcNow.Ticks;
             var commitId = Guid.NewGuid();
@@ -21,7 +26,12 @@ namespace SequencedAggregate
             CommitEvents(id, sequenceAnchor, commitId, events);
         }
 
-        public void CommitEvents<TEvent>(string id, long sequenceAnchor, Guid commitId, IEnumerable<TEvent> events) where TEvent : class
+        public void CommitEvent(string id, long sequenceAnchor, Guid commitId, TEventBase @event)
+        {
+            CommitEvents(id, sequenceAnchor, commitId, new []{ @event });
+        }
+
+        public void CommitEvents(string id, long sequenceAnchor, Guid commitId, IEnumerable<TEventBase> events)
         {
             using (var stream = _eventStore.OpenStream(id))
             {
@@ -45,12 +55,12 @@ namespace SequencedAggregate
             }
         }
 
-        public IEnumerable<TEvent> GetById<TEvent>(string id) where TEvent : class
+        public IEnumerable<TEventBase> GetById(string id)
         {
             using (var stream = _eventStore.OpenStream(id))
             {
                 var events = stream.CommittedEvents;
-                var sequencedEvents = Sequencer.Sequence<TEvent>(events);
+                var sequencedEvents = Sequencer.Sequence<TEventBase>(events);
                 return sequencedEvents;
             }
         }

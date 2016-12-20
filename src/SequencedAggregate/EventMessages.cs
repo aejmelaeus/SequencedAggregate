@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SequencedAggregate
 {
-    public static class EventMessages
+    internal static class EventMessages
     {
-        public static IEnumerable<EventMessage> Parse(long sequenceAnchor, IEnumerable<object> events)
+        internal static IEnumerable<EventMessage> Parse(long sequenceAnchor, IEnumerable<object> events)
         {
             var result = new List<EventMessage>();
 

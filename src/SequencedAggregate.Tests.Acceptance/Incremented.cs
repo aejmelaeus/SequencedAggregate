@@ -2,7 +2,7 @@
 
 namespace SequencedAggregate.Tests.Acceptance
 {
-    internal class Incremented
+    internal class Incremented : TestEventBase
     {
         public Guid MessageId { get; set; }
     }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace SequencedAggregate
 {
-    public static class Sequencer
+    internal static class Sequencer
     {
-        public static IEnumerable<TEvent> Sequence<TEvent>(ICollection<EventMessage> events) where TEvent : class
+        internal static IEnumerable<TEvent> Sequence<TEvent>(ICollection<EventMessage> events) where TEvent : class
         {
             var result = new List<SortableEventMessage<TEvent>>();
 

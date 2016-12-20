@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using NEventStore;
 using NUnit.Framework;
-using System.Collections.Generic;
 using NEventStore.Persistence.Sql.SqlDialects;
 
 namespace SequencedAggregate.Tests.Acceptance
@@ -15,10 +15,9 @@ namespace SequencedAggregate.Tests.Acceptance
             // Arrange
             var storeEvents = GetStoreEvents();
 
-            var userId = Guid.NewGuid();
+            var userId = Guid.NewGuid().ToString();
 
-            var sequencedEventStore = new SequencedNEventStore(storeEvents);
-            var userRepository = new UserRepository(sequencedEventStore);
+            var sequencedEventStore = new SequencedNEventStore<TestEventBase>(storeEvents);
 
             const string newestEmail = "bob.spelled.right@test.com";
             const string newEmail = "bop.spelled.wrong@test.com";
@@ -26,18 +25,18 @@ namespace SequencedAggregate.Tests.Acceptance
             const int earlier = 123;
             const int later = 124;
 
-            var newestEvent = new UserEmailUpdated { NewEmail = newestEmail, SequenceAnchor = later };
-            var failedEvent = new UserEmailUpdated { NewEmail = newEmail, SequenceAnchor = earlier};
+            var newestEvent = new UserEmailUpdated { Id = userId, NewEmail = newestEmail, SequenceAnchor = later };
+            var failedEvent = new UserEmailUpdated { Id = userId, NewEmail = newEmail, SequenceAnchor = earlier};
             
             // Act
             // We commit the second event first, simulating that it has 
             // arrived in wrong order
-            userRepository.CommitEvent(userId, newestEvent.SequenceAnchor, newestEvent);
-            userRepository.CommitEvent(userId, failedEvent.SequenceAnchor, failedEvent);
-            
+            sequencedEventStore.CommitEvent(newestEvent.Id, newestEvent.SequenceAnchor, Guid.NewGuid(), newestEvent);
+            sequencedEventStore.CommitEvent(failedEvent.Id, failedEvent.SequenceAnchor, Guid.NewGuid(), failedEvent);
+
             // Assert
-            var user = userRepository.GetById(userId);
-            Assert.That(user.Email, Is.EqualTo(newestEmail));
+            var users = sequencedEventStore.GetById(userId.ToString());
+            Assert.That((users.Last() as UserEmailUpdated).NewEmail, Is.EqualTo(newestEmail));
         }
 
         [Test]
@@ -53,20 +52,19 @@ namespace SequencedAggregate.Tests.Acceptance
 
             var id = Guid.NewGuid();
 
-            var sequencedEventStore = new SequencedNEventStore(storeEvents);
-            var incrementRepository = new IncrementRepository(sequencedEventStore);
+            var sequencedEventStore = new SequencedNEventStore<TestEventBase>(storeEvents);
             
             // Act
-            // We simulate that we are in NServiceBus Handker that has committed the
+            // We simulate that we are in NServiceBus Handler that has committed the
             // event but somehting else failed and the message is retried.
             // We don't want dublicate commits.
-            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<Incremented> { incremented });
-            sequencedEventStore.CommitEvents(id.ToString(), sequenceAnchor, messageId, new List<Incremented> { incremented });
+            sequencedEventStore.CommitEvent(id.ToString(), sequenceAnchor, messageId, incremented);
+            sequencedEventStore.CommitEvent(id.ToString(), sequenceAnchor, messageId, incremented);
 
             // Assert
-            var increment = incrementRepository.GetById(id);
+            var increments = sequencedEventStore.GetById(id.ToString());
 
-            Assert.That(increment.IncrementValue, Is.EqualTo(1));
+            Assert.That(increments.Count(), Is.EqualTo(1));
         }
 
         private static IStoreEvents GetStoreEvents()

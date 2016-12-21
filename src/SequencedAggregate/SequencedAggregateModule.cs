@@ -29,12 +29,15 @@ namespace SequencedAggregate
             bldr.RegisterType<SqlServerViewRepository>()
                 .As<IViewRepository>();
 
+            bldr.RegisterType<SequencedNEventStore<TEventBase>>()
+                .As<ISequencedEventStore<TEventBase>>();
+
             bldr.RegisterType<ProjectionRepository<TEventBase>>()
                 .As<IProjectionRepository<TEventBase>>();
 
             bldr.RegisterType<AggregateRepository<TEventBase>>()
                 .As<IAggregateRepository<TEventBase>>();
-
+            
             bldr.RegisterAssemblyTypes(asseblies)
                 .Where(a => a.GetInterfaces().Any(i => i.IsAssignableFrom(typeof(IProjectionBuilder<TEventBase>))))
                 .AsImplementedInterfaces()
@@ -44,11 +47,11 @@ namespace SequencedAggregate
                 .As<IStoreEvents>();
         }
 
-        private static IStoreEvents GetEventSource()
+        private IStoreEvents GetEventSource()
         {
             return Wireup
                 .Init()
-                .UsingSqlPersistence("EventSource")
+                .UsingSqlPersistence("SequencedAggregate", "System.Data.SqlClient", _eventSourceConnectionString)
                     .WithDialect(new MsSqlDialect())
                     .EnlistInAmbientTransaction()
                 .InitializeStorageEngine()

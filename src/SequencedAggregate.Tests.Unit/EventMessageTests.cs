@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using System.Collections.Generic;
+using SequencedAggregate.Tests.Unit.Events;
 
 namespace SequencedAggregate.Tests.Unit
 {

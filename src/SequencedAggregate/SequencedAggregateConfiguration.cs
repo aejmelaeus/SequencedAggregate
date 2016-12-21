@@ -8,6 +8,11 @@ namespace SequencedAggregate
         private string _eventSourceConnectionString;
         private string _viewRepositoryConnectionString;
 
+        public static SequencedAggregateConfiguration Create()
+        {
+            return new SequencedAggregateConfiguration();
+        }
+
         public Module GetModule<TEventBase>() where TEventBase : class, new()
         {
             if (string.IsNullOrEmpty(_eventSourceConnectionString))

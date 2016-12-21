@@ -1,4 +1,4 @@
-﻿namespace SequencedAggregate.Tests.Unit
+﻿namespace SequencedAggregate.Tests.Unit.Events
 {
     internal class TestEvent
     {

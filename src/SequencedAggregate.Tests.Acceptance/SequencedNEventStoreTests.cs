@@ -7,7 +7,7 @@ using NEventStore.Persistence.Sql.SqlDialects;
 namespace SequencedAggregate.Tests.Acceptance
 {
     [TestFixture]
-    public class AcceptanceTests
+    public class SequencedNEventStoreTests
     {
         [Test]
         public void Sequencing_WhenOlderEventIsCommitedAfterNewer_OlderEventAppliedBeforeNewer()
@@ -70,8 +70,8 @@ namespace SequencedAggregate.Tests.Acceptance
         private static IStoreEvents GetStoreEvents()
         {
             string connectionString = Environment.GetEnvironmentVariables().Contains("APPVEYOR")
-                ? @"Server=(local)\SQL2014;Initial Catalog=Acceptance;User ID=sa;Password=Password12!"
-                : @"Server=(local)\SQLEXPRESS; Initial Catalog=SequencedAggregate.Acceptance; Integrated Security=True";
+                ? @"Server=(local)\SQL2014;Initial Catalog=SequencedAggregate;User ID=sa;Password=Password12!"
+                : @"Data Source=SE-UTV28172; Initial Catalog=SequencedAggregate; Integrated Security=True";
 
             return Wireup.Init()
                 .UsingSqlPersistence("SequencedAggregate", "System.Data.SqlClient", connectionString)

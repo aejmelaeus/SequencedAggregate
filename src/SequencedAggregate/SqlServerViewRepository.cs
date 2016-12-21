@@ -1,6 +1,5 @@
-﻿using System.Configuration;
+﻿using Newtonsoft.Json;
 using System.Data.SqlClient;
-using Newtonsoft.Json;
 
 namespace SequencedAggregate
 {
@@ -10,7 +9,7 @@ namespace SequencedAggregate
         private readonly string _tableName;
         private readonly string _pkName;
 
-        internal SqlServerViewRepository(ISqlServerViewRepositoryConfiguration configuration)
+        public SqlServerViewRepository(ISqlServerViewRepositoryConfiguration configuration)
         {
             _connectionString = configuration.ConnectionString;
 

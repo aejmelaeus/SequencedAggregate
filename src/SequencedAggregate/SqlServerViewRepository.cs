@@ -10,18 +10,14 @@ namespace SequencedAggregate
         private readonly string _tableName;
         private readonly string _pkName;
 
-        internal SqlServerViewRepository(string connectionString, string tableName)
+        internal SqlServerViewRepository(ISqlServerViewRepositoryConfiguration configuration)
         {
-            _connectionString = connectionString;
-            _tableName = tableName;
-            _pkName = tableName.Replace("-", string.Empty);
-        }
+            _connectionString = configuration.ConnectionString;
 
-        internal SqlServerViewRepository()
-        {
-            _connectionString = ConfigurationManager.ConnectionStrings["ProjectionRepository"].ConnectionString;
-            _tableName = "ProjectionRepository";
-            _pkName = "IdType";
+            // This is funky but it works, we want the integration tests to be idempotent by using a Guid, so that
+            // a new table and id can be created each time without worrying abut that the table or index exists...
+            _tableName = string.IsNullOrEmpty(configuration.TableName) ? "ProjectionRepository" : configuration.TableName;
+            _pkName = string.IsNullOrEmpty(configuration.TableName) ? "IdType" : configuration.TableName.Replace("-", string.Empty);
         }
 
         public void Commit<TView>(string id, TView view) where TView : class

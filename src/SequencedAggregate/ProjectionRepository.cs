@@ -23,6 +23,7 @@ namespace SequencedAggregate
             return _viewRepository.Read<TView>(id);
         }
 
+        // TODO - return the built view...
         public void Rebuild<TView>(string id)
         {
             var viewType = typeof(TView);

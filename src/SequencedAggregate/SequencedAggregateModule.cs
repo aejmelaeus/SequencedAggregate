@@ -8,9 +8,23 @@ namespace SequencedAggregate
 {
     internal class SequencedAggregateModule<TEventBase> : Module where TEventBase : class, new()
     {
+        private readonly string _eventSourceConnectionString;
+        private readonly string _viewRepositoryConnectionString;
+
+        public SequencedAggregateModule(string eventSourceConnectionString, string viewRepositoryConnectionString)
+        {
+            _eventSourceConnectionString = eventSourceConnectionString;
+            _viewRepositoryConnectionString = viewRepositoryConnectionString;
+        }
+
         protected override void Load(ContainerBuilder bldr)
         {
             var asseblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            var sqlServerViewRepositoryConfiguration = new SqlServerViewRepositoryConfiguration(_viewRepositoryConnectionString);
+
+            bldr.RegisterInstance(sqlServerViewRepositoryConfiguration)
+                .As<ISqlServerViewRepositoryConfiguration>();
 
             bldr.RegisterType<SqlServerViewRepository>()
                 .As<IViewRepository>();

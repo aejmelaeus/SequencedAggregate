@@ -60,6 +60,7 @@
     <Compile Include="IAggregateRepository.cs" />
     <Compile Include="IProjectionBuilder.cs" />
     <Compile Include="IProjectionRepository.cs" />
+    <Compile Include="ISqlServerViewRepositoryConfiguration.cs" />
     <Compile Include="IViewRepository.cs" />
     <Compile Include="SqlServerViewRepository.cs" />
     <Compile Include="EventMessages.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="SequenceConstants.cs" />
     <Compile Include="SequenceException.cs" />
     <Compile Include="Sequencer.cs" />
+    <Compile Include="SqlServerViewRepositoryConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

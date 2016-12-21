@@ -5,33 +5,8 @@ using NUnit.Framework;
 namespace SequencedAggregate.Tests.Acceptance
 {
     [TestFixture]
-    public class TransactionTests
+    public class TransactionTests : AcceptanceTestsBase<TransactionEventBase>
     {
-        private IContainer _container;
-
-        private readonly string _connectionString = Environment.GetEnvironmentVariables().Contains("APPVEYOR")
-                ? @"Server=(local)\SQL2014;Initial Catalog=SequencedAggregate;User ID=sa;Password=Password12!"
-                : @"Data Source=SE-UTV28172; Initial Catalog=SequencedAggregate; Integrated Security=True";
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            var bldr = new ContainerBuilder();
-
-            // TODO: Check .config connection strings...
-            // TODO: The Create table stuff in configuration
-
-            var module = SequencedAggregateConfiguration
-                .Create()
-                .WithEventSourceConnectionString(_connectionString)
-                .WithViewRepositoryConnectionString(_connectionString)
-                .GetModule<TransactionEventBase>();
-
-            bldr.RegisterModule(module);
-
-            _container = bldr.Build();
-        }
-
         [Test]
         public void Commit_WhenThereIsAProjectionBuilderThatCrashes_WriteToEventStreamNotCommitted()
         {

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SequencedAggregate.Tests.Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SequencedAggregate.Tests.Acceptance", "SequencedAggregate.Tests.Acceptance\SequencedAggregate.Tests.Acceptance.csproj", "{9F167FA6-5B1C-4F55-9FAB-B66DFD3ADE07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SequencedAggregate.Tests.Integration", "SequencedAggregate.Tests.Integration\SequencedAggregate.Tests.Integration.csproj", "{333C62C4-3C5D-4397-9B65-6BB56C5E8AF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9F167FA6-5B1C-4F55-9FAB-B66DFD3ADE07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F167FA6-5B1C-4F55-9FAB-B66DFD3ADE07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F167FA6-5B1C-4F55-9FAB-B66DFD3ADE07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333C62C4-3C5D-4397-9B65-6BB56C5E8AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333C62C4-3C5D-4397-9B65-6BB56C5E8AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333C62C4-3C5D-4397-9B65-6BB56C5E8AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333C62C4-3C5D-4397-9B65-6BB56C5E8AF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

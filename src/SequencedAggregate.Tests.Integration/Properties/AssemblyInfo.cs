@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SequencedAggregate")]
+[assembly: AssemblyTitle("SequencedAggregate.Tests.Integration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SequencedAggregate")]
+[assembly: AssemblyProduct("SequencedAggregate.Tests.Integration")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,11 +19,8 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-[assembly: InternalsVisibleTo("SequencedAggregate.Tests.Unit")]
-[assembly: InternalsVisibleTo("SequencedAggregate.Tests.Integration")]
-
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6a43ee69-8d18-4086-8744-a068ceb7fc6a")]
+[assembly: Guid("333c62c4-3c5d-4397-9b65-6bb56c5e8af3")]
 
 // Version information for an assembly consists of the following four values:
 //

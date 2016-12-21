@@ -22,7 +22,6 @@ namespace SequencedAggregate
 
         public void Handle(string id, IEnumerable<TEventBase> events)
         {
-            // TODO - Hmmm..
             var materializedEvents = events?.ToList() ?? new List<TEventBase>();
 
             if (!AnyEventsToHandle(materializedEvents)) return;

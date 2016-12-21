@@ -25,6 +25,10 @@ namespace SequencedAggregate
                 _viewRepositoryConnectionString = ConfigurationManager.ConnectionStrings["ProjectionRepository"].ConnectionString;
             }
 
+            var sqlViewRepositoryConfiguration = new SqlServerViewRepositoryConfiguration(_viewRepositoryConnectionString);
+            var sqlViewRepository = new SqlServerViewRepository(sqlViewRepositoryConfiguration);
+            sqlViewRepository.CreateProjectionsTable();
+
             return new SequencedAggregateModule<TEventBase>(_eventSourceConnectionString, _viewRepositoryConnectionString);
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace SequencedAggregate.Tests.Acceptance
 {
-    internal class TestEventBase
+    public class TestEventBase
     {
         // Nothing here...
     }

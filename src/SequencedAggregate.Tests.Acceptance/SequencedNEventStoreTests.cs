@@ -1,23 +1,20 @@
 ﻿using System;
+using Autofac;
 using System.Linq;
-using NEventStore;
 using NUnit.Framework;
-using NEventStore.Persistence.Sql.SqlDialects;
 
 namespace SequencedAggregate.Tests.Acceptance
 {
     [TestFixture]
-    public class SequencedNEventStoreTests
+    public class SequencedNEventStoreTests : AcceptanceTestsBase<TestEventBase>
     {
         [Test]
         public void Sequencing_WhenOlderEventIsCommitedAfterNewer_OlderEventAppliedBeforeNewer()
         {
             // Arrange
-            var storeEvents = GetStoreEvents();
-
             var userId = Guid.NewGuid().ToString();
 
-            var sequencedEventStore = new SequencedNEventStore<TestEventBase>(storeEvents);
+            var sequencedEventStore = _container.Resolve<ISequencedEventStore<TestEventBase>>();
 
             const string newestEmail = "bob.spelled.right@test.com";
             const string newEmail = "bop.spelled.wrong@test.com";
@@ -47,13 +44,11 @@ namespace SequencedAggregate.Tests.Acceptance
             var sequenceAnchor = 123;
 
             var incremented = new Incremented { MessageId = messageId };
- 
-            var storeEvents = GetStoreEvents();
 
             var id = Guid.NewGuid();
 
-            var sequencedEventStore = new SequencedNEventStore<TestEventBase>(storeEvents);
-            
+            var sequencedEventStore = _container.Resolve<ISequencedEventStore<TestEventBase>>();
+
             // Act
             // We simulate that we are in NServiceBus Handler that has committed the
             // event but somehting else failed and the message is retried.
@@ -65,21 +60,6 @@ namespace SequencedAggregate.Tests.Acceptance
             var increments = sequencedEventStore.GetById(id.ToString());
 
             Assert.That(increments.Count(), Is.EqualTo(1));
-        }
-
-        private static IStoreEvents GetStoreEvents()
-        {
-            string connectionString = Environment.GetEnvironmentVariables().Contains("APPVEYOR")
-                ? @"Server=(local)\SQL2014;Initial Catalog=SequencedAggregate;User ID=sa;Password=Password12!"
-                : @"Data Source=SE-UTV28172; Initial Catalog=SequencedAggregate; Integrated Security=True";
-
-            return Wireup.Init()
-                .UsingSqlPersistence("SequencedAggregate", "System.Data.SqlClient", connectionString)
-                    .WithDialect(new MsSqlDialect())
-                    .InitializeStorageEngine()
-                .UsingJsonSerialization()
-                    .Compress()
-                .Build();
         }
     }
 }

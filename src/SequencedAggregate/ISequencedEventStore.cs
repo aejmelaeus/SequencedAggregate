@@ -9,12 +9,30 @@ namespace SequencedAggregate
     public interface ISequencedEventStore<TEventBase> where TEventBase : class
     {
         /// <summary>
+        /// Commits the event to the stream. SequenceAnchor are Ticks from DateTime.UtcNow 
+        /// and the CommitId is a new Guid.
+        /// </summary>
+        /// <param name="id">The stream id</param>
+        /// <param name="event">The events</param>
+        void CommitEvent(string id, TEventBase @event);
+
+        /// <summary>
         /// Commits events to the stream. SequenceAnchor are Ticks from DateTime.UtcNow 
         /// and the CommitId is a new Guid.
         /// </summary>
         /// <param name="id">The stream id</param>
         /// <param name="events">The events</param>
         void CommitEvents(string id, IEnumerable<TEventBase> events);
+
+        /// <summary>
+        /// Commits the event to the stream
+        /// Use this method if you are reacting to events from other bounded contexts.
+        /// </summary>
+        /// <param name="id">The stream id</param>
+        /// <param name="sequenceAnchor">The sequence anchor when the event occured</param>
+        /// <param name="commitId">The commit id, for example NServiceBus Message Id</param>
+        /// <param name="event">The event</param>
+        void CommitEvent(string id, long sequenceAnchor, Guid commitId, TEventBase @event);
 
         /// <summary>
         /// Commits events to the stream.

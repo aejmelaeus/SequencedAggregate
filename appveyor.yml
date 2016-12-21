@@ -18,6 +18,7 @@ test:
   assemblies:
   - 'SequencedAggregate.Tests.Unit.dll'
   - 'SequencedAggregate.Tests.Acceptance.dll'
+  - 'SequencedAggregate.Tests.Integration.dll'
 after_build: nuget pack SequencedAggregate\SequencedAggregate.csproj -Version %APPVEYOR_BUILD_VERSION%
 artifacts:
   - path: '**\SequencedAggregate*.nupkg'

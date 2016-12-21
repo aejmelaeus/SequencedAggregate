@@ -13,7 +13,7 @@ namespace SequencedAggregate.Tests.Acceptance
             // Arrange
             string id = Guid.NewGuid().ToString();
 
-            var aggregates = _container.Resolve<IAggregateRepository<TransactionEventBase>>();
+            var aggregates = Container.Resolve<IAggregateRepository<TransactionEventBase>>();
 
             var transaction = aggregates.Read<TransactionAggregate>(id);
             transaction.CreateTransaction(id);

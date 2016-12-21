@@ -14,7 +14,7 @@ namespace SequencedAggregate.Tests.Acceptance
             // Arrange
             var userId = Guid.NewGuid().ToString();
 
-            var sequencedEventStore = _container.Resolve<ISequencedEventStore<TestEventBase>>();
+            var sequencedEventStore = Container.Resolve<ISequencedEventStore<TestEventBase>>();
 
             const string newestEmail = "bob.spelled.right@test.com";
             const string newEmail = "bop.spelled.wrong@test.com";
@@ -47,7 +47,7 @@ namespace SequencedAggregate.Tests.Acceptance
 
             var id = Guid.NewGuid();
 
-            var sequencedEventStore = _container.Resolve<ISequencedEventStore<TestEventBase>>();
+            var sequencedEventStore = Container.Resolve<ISequencedEventStore<TestEventBase>>();
 
             // Act
             // We simulate that we are in NServiceBus Handler that has committed the

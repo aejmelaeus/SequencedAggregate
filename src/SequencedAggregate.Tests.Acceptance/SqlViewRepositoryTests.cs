@@ -22,7 +22,7 @@ namespace SequencedAggregate.Tests.Acceptance
                 Name = name
             };
 
-            var viewRepository = _container.Resolve<IViewRepository>();
+            var viewRepository = Container.Resolve<IViewRepository>();
 
             // Act
             viewRepository.Commit(id, companyView);
@@ -50,7 +50,7 @@ namespace SequencedAggregate.Tests.Acceptance
                 Category = "ACategory"
             };
 
-            var viewRepository = _container.Resolve<IViewRepository>();
+            var viewRepository = Container.Resolve<IViewRepository>();
 
             viewRepository.Commit(id, companyView);
 

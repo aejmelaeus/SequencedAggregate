@@ -9,7 +9,7 @@ namespace SequencedAggregate.Tests.Integration
     {
         private readonly string _connectionString = Environment.GetEnvironmentVariables().Contains("APPVEYOR")
                 ? @"Server=(local)\SQL2014;Initial Catalog=SequencedAggregate;User ID=sa;Password=Password12!"
-                : @"Data Source=SE-UTV28172; Initial Catalog=SequencedAggregate; Integrated Security=True";
+                : @"Data Source=<FIX>; Initial Catalog=SequencedAggregate; Integrated Security=True";
 
         [Test]
         public void CreateTable_WhenTableDoesNotExist_TableCreatedCorrectly()

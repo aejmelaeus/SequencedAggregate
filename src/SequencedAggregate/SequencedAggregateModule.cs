@@ -8,20 +8,18 @@ namespace SequencedAggregate
 {
     internal class SequencedAggregateModule<TEventBase> : Module where TEventBase : class, new()
     {
-        private readonly string _eventSourceConnectionString;
-        private readonly string _viewRepositoryConnectionString;
+        private readonly string _connectionString;
 
-        public SequencedAggregateModule(string eventSourceConnectionString, string viewRepositoryConnectionString)
+        public SequencedAggregateModule(string connectionString)
         {
-            _eventSourceConnectionString = eventSourceConnectionString;
-            _viewRepositoryConnectionString = viewRepositoryConnectionString;
+            _connectionString = connectionString;
         }
 
         protected override void Load(ContainerBuilder bldr)
         {
             var asseblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            var sqlServerViewRepositoryConfiguration = new SqlServerViewRepositoryConfiguration(_viewRepositoryConnectionString);
+            var sqlServerViewRepositoryConfiguration = new SqlServerViewRepositoryConfiguration(_connectionString);
 
             bldr.RegisterInstance(sqlServerViewRepositoryConfiguration)
                 .As<ISqlServerViewRepositoryConfiguration>();
@@ -51,7 +49,7 @@ namespace SequencedAggregate
         {
             return Wireup
                 .Init()
-                .UsingSqlPersistence("SequencedAggregate", "System.Data.SqlClient", _eventSourceConnectionString)
+                .UsingSqlPersistence("SequencedAggregate", "System.Data.SqlClient", _connectionString)
                     .WithDialect(new MsSqlDialect())
                     .EnlistInAmbientTransaction()
                 .InitializeStorageEngine()

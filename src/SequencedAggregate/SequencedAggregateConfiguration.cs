@@ -5,8 +5,7 @@ namespace SequencedAggregate
 {
     public class SequencedAggregateConfiguration
     {
-        private string _eventSourceConnectionString;
-        private string _viewRepositoryConnectionString;
+        private string _connectionString;
 
         public static SequencedAggregateConfiguration Create()
         {
@@ -15,33 +14,21 @@ namespace SequencedAggregate
 
         public Module GetModule<TEventBase>() where TEventBase : class, new()
         {
-            if (string.IsNullOrEmpty(_eventSourceConnectionString))
+            if (string.IsNullOrEmpty(_connectionString))
             {
-                _eventSourceConnectionString = ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString;
+                _connectionString = ConfigurationManager.ConnectionStrings["SequencedAggregate"].ConnectionString;
             }
 
-            if (string.IsNullOrEmpty(_viewRepositoryConnectionString))
-            {
-                _viewRepositoryConnectionString = ConfigurationManager.ConnectionStrings["ProjectionRepository"].ConnectionString;
-            }
-
-            var sqlViewRepositoryConfiguration = new SqlServerViewRepositoryConfiguration(_viewRepositoryConnectionString);
+            var sqlViewRepositoryConfiguration = new SqlServerViewRepositoryConfiguration(_connectionString);
             var sqlViewRepository = new SqlServerViewRepository(sqlViewRepositoryConfiguration);
             sqlViewRepository.CreateProjectionsTable();
 
-            return new SequencedAggregateModule<TEventBase>(_eventSourceConnectionString, _viewRepositoryConnectionString);
+            return new SequencedAggregateModule<TEventBase>(_connectionString);
         }
 
-        public SequencedAggregateConfiguration WithEventSourceConnectionString(string connectionString)
+        public SequencedAggregateConfiguration WithConnectionString(string connectionString)
         {
-            _eventSourceConnectionString = connectionString;
-
-            return this;
-        }
-
-        public SequencedAggregateConfiguration WithViewRepositoryConnectionString(string connectionString)
-        {
-            _viewRepositoryConnectionString = connectionString;
+            _connectionString = connectionString;
 
             return this;
         }

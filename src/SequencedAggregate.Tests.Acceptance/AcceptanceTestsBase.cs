@@ -10,7 +10,7 @@ namespace SequencedAggregate.Tests.Acceptance
 
         private readonly string _connectionString = Environment.GetEnvironmentVariables().Contains("APPVEYOR")
             ? @"Server=(local)\SQL2014;Initial Catalog=SequencedAggregate;User ID=sa;Password=Password12!"
-            : @"Data Source=<FIX>; Initial Catalog=SequencedAggregate; Integrated Security=True";
+            : @"Data Source=SE-UTV28172; Initial Catalog=SequencedAggregate; Integrated Security=True";
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -19,8 +19,7 @@ namespace SequencedAggregate.Tests.Acceptance
 
             var module = SequencedAggregateConfiguration
                 .Create()
-                .WithEventSourceConnectionString(_connectionString)
-                .WithViewRepositoryConnectionString(_connectionString)
+                .WithConnectionString(_connectionString)
                 .GetModule<TEventBase>();
 
             bldr.RegisterModule(module);

@@ -10,6 +10,7 @@ namespace SequencedAggregate
         where TView : class, new()
     {
         public IViewRepository ViewRepository { get; set; }
+        public ISequencedEventStore<TEventBase> EventStore { get; set; }
 
         public Type ViewType => typeof(TView);
 
@@ -33,13 +34,20 @@ namespace SequencedAggregate
             ViewRepository.Commit(id, view);
         }
 
-        public void Rebuild(string id, IEnumerable<TEventBase> events)
+        public void Rebuild(string id)
         {
-            var view = new TView();
-
-            view = Handle(events, view);
+            var view = ReadFromStream(id);
 
             ViewRepository.Commit(id, view);
+        }
+
+        public TView ReadFromStream(string id)
+        {
+            var events = EventStore.GetById(id);
+            var view = new TView();
+            view = Handle(events, view);
+
+            return view;
         }
 
         private TView Handle(IEnumerable<TEventBase> events, TView view)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NSubstitute;
 using NUnit.Framework;
 using SequencedAggregate.Tests.Unit.Events;
 
@@ -111,14 +112,17 @@ namespace SequencedAggregate.Tests.Unit
             };
 
             var projectionRepository = new TestCompanyViewRepository();
+            var eventStore = Substitute.For<ISequencedEventStore<EventBase>>();
+            eventStore.GetById(id).Returns(events);
 
             var projectionBuilder = new CompanyProjectionBuilder
             {
-                ViewRepository = projectionRepository
+                ViewRepository = projectionRepository,
+                EventStore = eventStore
             };
 
             // Act
-            projectionBuilder.Rebuild(id, events);
+            projectionBuilder.Rebuild(id);
             var view = projectionRepository.Read<CompanyView>(id);
 
             // Assert

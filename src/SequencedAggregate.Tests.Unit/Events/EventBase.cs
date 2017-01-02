@@ -1,6 +1,6 @@
 namespace SequencedAggregate.Tests.Unit.Events
 {
-    internal class EventBase
+    public class EventBase
     {
         // Nothing here...
     }

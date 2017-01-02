@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("SequencedAggregate.Tests.Unit")]
 [assembly: InternalsVisibleTo("SequencedAggregate.Tests.Integration")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("6a43ee69-8d18-4086-8744-a068ceb7fc6a")]

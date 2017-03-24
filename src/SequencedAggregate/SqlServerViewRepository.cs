@@ -24,18 +24,29 @@ namespace SequencedAggregate
             var type = typeof(TView).ToString();
             var json = JsonConvert.SerializeObject(view);
 
-            var sql = $@"IF EXISTS (SELECT * FROM [dbo].[{_tableName}] WHERE [Id] = '{id}' AND [Type] = '{type}')
+
+            var sql = $@"IF EXISTS (SELECT * FROM [dbo].[{_tableName}] WHERE [Id] = @id AND [Type] = @type)
                          BEGIN
-                             UPDATE [dbo].[{_tableName}] SET [Json] = '{json}'
-                             WHERE [Id] = '{id}' AND [Type] = '{type}'
+                             UPDATE [dbo].[{_tableName}] SET [Json] = @json
+                             WHERE [Id] = @id AND [Type] = @type
                          END
                          ELSE
                          BEGIN
                              INSERT INTO [dbo].[{_tableName}] ([Id], [Type], [Json])
-                             VALUES ('{id}', '{type}', '{json}')
+                             VALUES (@id, @type, @json)
                          END";
 
-            Execute(sql);
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                using (var command = new SqlCommand(sql, conn))
+                {
+                    command.Parameters.AddWithValue("id", id);
+                    command.Parameters.AddWithValue("type", type);
+                    command.Parameters.AddWithValue("json", json);
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         public TView Read<TView>(string id) where TView : class
